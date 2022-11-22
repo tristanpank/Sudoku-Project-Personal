@@ -23,12 +23,12 @@ class SudokuGenerator:
 	None
     '''
     def __init__(self, row_length, removed_cells):
-        self.row = row_length
+        self.row_length = row_length
         self.removed_cells = removed_cells
         self.board = [
-            [0 for i in range(self.row)] for i in range(self.row)
+            [0 for i in range(self.row_length)] for i in range(self.row_length)
         ]
-        self.box_length = math.sqrt(self.row)
+        self.box_length = int(math.sqrt(self.row_length))
 
 
 
@@ -82,7 +82,7 @@ class SudokuGenerator:
     '''
     def valid_in_col(self, col, num):
         for row in self.board:
-            if num == row[col]:
+            if num == row[int(col)]:
                 return False
         else:
             return True
@@ -100,6 +100,7 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def valid_in_box(self, row_start, col_start, num):
+        col_start = int(col_start)
         rows = self.board[row_start:row_start+3]
         for row in rows:
             if num in row[col_start:col_start+3]:
@@ -132,9 +133,9 @@ class SudokuGenerator:
         row_start, col_start = SudokuGenerator.find_box(row, col)
         box_status = self.valid_in_box(row_start, col_start, num)
         if row_status and col_status and box_status:
-            return True
-        else:
             return False
+        else:
+            return True
 
 
 
@@ -234,7 +235,15 @@ class SudokuGenerator:
 	Return: None
     '''
     def remove_cells(self):
-        pass
+        used_coords = {0:[], 1:[], 2:[], 3:[], 4:[], 5:[], 6:[], 7:[], 8:[], 9:[]}
+        i = 0
+        while i < self.removed_cells:
+            row = random.randint(0, 8)
+            col = random.randint(0, 8)
+            if col not in used_coords[row]:
+                self.board[row][col] = 0
+                used_coords[row].append(col)
+            i += 1
 
 '''
 DO NOT CHANGE
