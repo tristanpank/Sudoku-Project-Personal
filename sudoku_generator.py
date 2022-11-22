@@ -108,6 +108,15 @@ class SudokuGenerator:
             return True
     
     '''
+    Using the row and col, returns the row_start/col_start of curr box
+    '''
+    @staticmethod
+    def find_box(row, col):
+        row_start = (row // 3) * 3
+        col_start = (col // 3) * 3
+        return row_start, col_start
+
+    '''
     Determines if it is valid to enter num at (row, col) in the board
     This is done by checking that num is unused in the appropriate, row, column, and box
 
@@ -118,7 +127,17 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def is_valid(self, row, col, num):
-        pass
+        row_status = self.valid_in_row(row, num)
+        col_status = self.valid_in_col(col, num)
+        row_start, col_start = SudokuGenerator.find_box(row, col)
+        box_status = self.valid_in_box(row_start, col_start, num)
+        if row_status and col_status and box_status:
+            return True
+        else:
+            return False
+
+
+
 
     '''
     Fills the specified 3x3 box with values
